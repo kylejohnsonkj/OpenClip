@@ -1,195 +1,219 @@
 const url = new URL(location.href);
 
-// MARK: - TikTok
+chrome.runtime.sendMessage({ type: "getVersion" }, version => {
+    localStorage.setItem("OpenClip-currentVersion", version);
+});
 
-// ROUTE 1: Redirect TikTok videos and photo slideshows to playable links
-if (/^\/@[^/]*\/(video|photo)\/\d+/.test(url.pathname)) {
-    const newUrl = url.href.split('?')[0] + '?_r=1'; // _r=1 embeds comments below video
-    
-    if (newUrl !== url.href) {
-        // Redirect!
-        location.replace(newUrl);
-    } else {
-        // URL has been redirected. We can now modify the DOM.
-        modifyTikTokPage();
+(async () => {
+    const isInstagramPurchased = await checkInstagramPurchaseStatus();
+    const wasInstagramPurchased = localStorage.getItem('instagramPurchaseStatus') === 'true';
+    if (isInstagramPurchased !== wasInstagramPurchased) {
+        localStorage.setItem('instagramPurchaseStatus', String(isInstagramPurchased));
+        window.location.reload();
     }
-}
+})();
 
-// ROUTE 2: Modify TikTok channel pages to support navigation
-if (/^\/@[^/]+\/?$/.test(url.pathname)) {
-    const observer = new MutationObserver(() => {
-        // Allow taps on channel videos
-        addRecommendationHandlers();
-        
-        // Add share button support
-        attachShareHandler("share-btn");
+async function checkInstagramPurchaseStatus() {
+    const response = await new Promise(resolve => {
+        chrome.runtime.sendMessage({ type: 'checkInstagramPurchaseStatus' }, response => resolve(response));
     });
-    
-    observer.observe(document, { childList: true, subtree: true });
+    return Boolean(response?.instagramPurchaseStatus);
 }
 
-// ROUTE 3: Redirect TikTok discover pages to hero video link (if present)
-if (/^\/discover\//.test(url.pathname)) {
-    const observer = new MutationObserver(() => {
-        const link = document.querySelector('div[class*="DivVideoCard"][style*="grid-column"] div[class*="DivVideoPlayer"] a');
-        if (link) {
-            const newUrl = link.href.split('?')[0] + '?_r=1';
+if (url.hostname.includes('tiktok.com')) {
+    if (/^\/@[^/]*\/(video|photo)\/\d+/.test(url.pathname)) {
+        // Player: Redirect TikTok videos and photo slideshows to playable links
+        const newUrl = url.href.split('?')[0] + '?_r=1'; // _r=1 embeds comments below video
+        
+        if (newUrl !== url.href) {
+            // Redirect!
             location.replace(newUrl);
-        }
-    });
-    
-    observer.observe(document, { childList: true, subtree: true });
-}
-
-function modifyTikTokPage() {
-    // Force "Watch again" button to always reload the video and not redirect to the App Store
-    fixWatchAgainButton();
-    
-    const observer = new MutationObserver(() => {
-        // Remove smart app banner and automatically close popups
-        document.querySelector('meta[name="apple-itunes-app"]')?.remove();
-        document.querySelector('button[class*="close-button"]')?.click();
-        document.querySelector('span[data-e2e*="launch-popup-close"]')?.click();
-        
-        // Add channel button support
-        attachChannelHandler();
-        
-        // Add share button support
-        attachShareHandler("play-side-share");
-        
-        // Attempt to insert casual review prompt
-        insertMessageUnderWatchAgain();
-    });
-    
-    observer.observe(document, { childList: true, subtree: true });
-}
-
-function attachChannelHandler() {
-    const authorButton = document.querySelector('div[data-e2e="play-side-author"]');
-    if (authorButton && !authorButton.dataset.listenerAttached) {
-        authorButton.dataset.listenerAttached = 'true';
-        authorButton.addEventListener('click', e => {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            const link = authorButton.querySelector('a');
-            if (!link) return;
-            
-            window.location.href = link.href;
-        }, true);
-    }
-}
-
-function attachShareHandler(identifier) {
-    const shareButton = document.querySelector(`div[data-e2e="${identifier}"]`);
-    if (shareButton && !shareButton.dataset.listenerAttached) {
-        shareButton.dataset.listenerAttached = 'true';
-        shareButton.addEventListener('click', e => {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            navigator.share?.({
-                title: document.title,
-                url: window.location.href
-            }) || alert("Sharing not supported");
-        }, true);
-    }
-}
-
-function addRecommendationHandlers() {
-//    const recommendedVideos = document.querySelectorAll('li[class*="recommend-item"]');
-    const channelVideos = document.querySelectorAll('div[class*="DivMultiColumnItemContainer"]');
-    
-    channelVideos.forEach(item => {
-        if (item.dataset.listenerAttached) return;
-        item.dataset.listenerAttached = 'true';
-        
-        const link = item.querySelector('a');
-        if (!link) return;
-        
-        item.addEventListener('click', e => {
-            e.preventDefault();
-            e.stopPropagation();
-            window.location.href = link.href + '?_r=1';
-        }, true);
-    });
-}
-
-function fixWatchAgainButton() {
-    let didWatchAgain = false;
-    
-    document.addEventListener("click", function(event) {
-        if (!event.target.closest('div[class*="DivCTABtnContainer"]')) return;
-        
-        if (didWatchAgain) {
-            // e.preventDefault(); // breaks capture
-            event.stopPropagation();
-            location.reload();
         } else {
-            didWatchAgain = true;
+            // URL has been redirected. We can now modify the DOM.
+            initTikTok();
         }
-    }, true);
+    } else if (/^\/@[^/]+\/?$/.test(url.pathname) || /^\/discover\//.test(url.pathname)) {
+        // Channel: Modify TikTok channel and discover pages
+        initTikTok();
+    }
+    
+} else if (url.hostname.includes('instagram.com')) {
+    if (/^\/(reel|p)\/[^/]+/.test(url.pathname)) {
+        const newUrl = url.href.split('?')[0] + `?l=1`;
+        
+        if (newUrl !== url.href) {
+            // Redirect!
+            location.replace(newUrl);
+        } else {
+            // URL has been redirected. We can now modify the DOM.
+            initInstagram(true);
+        }
+    } else if (/\/(posts|feed|reels|saved|tagged)\/?$/.test(url.pathname)) {
+        // Channel: Modify logged out profile page
+        initInstagram(false);
+        
+    } else {
+        redirectEmptyProfilePaths();
+    }
 }
 
-function insertMessageUnderWatchAgain() {
-    // Exclude from setup video
-    const setupVideoPath = "/video/6876424179084709126";
-    if (location.pathname.includes(setupVideoPath)) return;
+function initTikTok() {
+    onDomReady(() => {
+        injectCss('openclip-tiktok-css', 'tiktok.css');
+        injectJs('openclip-tiktok-js', 'tiktok.js');
+    });
     
-    // Exclude if user has already reviewed the current version
-    const currentVersion = chrome.runtime.getManifest().version;
-    if (currentVersion === localStorage.getItem("OpenClip-lastReviewedVersion")) return;
-    
-    // Do not reinsert if message is already present
+    // Inject OpenClip banner at bottom of page
+    const observer = new MutationObserver(() => {
+        appendOpenClipFooter(observer);
+    });
+    observer.observe(document, { childList: true, subtree: true });
+}
+
+function appendOpenClipFooter(observer) {
     const messageId = "openclip-message";
     if (document.getElementById(messageId)) return;
     
-    // Do not insert if 'Watch again' container cannot be found
-    const targetElement = document.querySelector('div[class*="DivSwiperList"]');
-    if (!targetElement) return;
+//    localStorage.setItem("OpenClip-footerValue", String(0)); // testing
     
-    const message = createMessageElement(messageId);
-    targetElement.appendChild(message);
-}
-
-function createMessageElement(messageId) {
-    const message = document.createElement("div");
-    message.id = messageId;
+    var footerValue = Number(localStorage.getItem("OpenClip-footerValue") || 0);
+    const wasInstagramPurchased = localStorage.getItem('instagramPurchaseStatus') === 'true';
+    if (wasInstagramPurchased && (footerValue == 0 || footerValue == 1)) {
+        footerValue = 2;
+    }
     
-    Object.assign(message.style, {
-        width: "100%",
-        textAlign: "center",
-        padding: "25px",
-        fontSize: "13px",
-        fontFamily: "Arial, Tahoma, sans-serif",
-        position: "absolute",
-        bottom: "0",
-        left: "0"
+    // 0 - not purchased (default)
+    // 1 - not purchased, dismissed
+    // 2 - purchased
+    // 3 - purchased, dismissed
+    const messages = {
+        0: `
+            OpenClip now supports
+            <b class="medium">Instagram Reels</b>!
+            <a href="openclip://instagram">Activate in the app today.</a>
+        `,
+        2: `Thank you for supporting development! ❤️`
+    };
+    
+    const messageHTML = messages[footerValue];
+    if (!messageHTML) return;
+    
+    const comments = document.querySelector('div[class*="DivCommentListContainer"]');
+    const parent = comments.parentNode;
+    const iconURL = browser.runtime.getURL("images/app-icon.png");
+    
+    if (!comments || !parent || !iconURL) return;
+    
+    const footer = document.createElement("div");
+    footer.id = messageId;
+    footer.innerHTML = `
+        <img src="${iconURL}" alt="OpenClip Icon">
+        <p>${messageHTML}</p>
+        <button aria-label="Dismiss">✕</button>
+    `;
+    
+    footer.querySelector("button").addEventListener("click", () => {
+        footer.style.display = "none";
+        localStorage.setItem("OpenClip-footerValue", String(footerValue + 1));
     });
     
-    const link = createReviewLink();
-    message.appendChild(link);
-    return message;
+    parent.append(footer);
+    observer.disconnect();
 }
 
-function createReviewLink() {
-    const link = document.createElement("a");
-    link.href = "openclip://review";
-    Object.assign(link.style, { color: "white", textDecoration: "none" });
+function initInstagram(isReel) {
+    if (localStorage.getItem('instagramPurchaseStatus') !== 'true') return;
     
-    const plainText = document.createElement("span");
-    const underlinedText = document.createElement("span");
-    underlinedText.style.textDecoration = "underline";
+    onDomReady(() => {
+        if (isReel) {
+            injectCss('openclip-instagram-css', 'instagram.css');
+            injectJs('openclip-instagram-js', 'instagram.js');
+        } else {
+            injectCss('openclip-instagram-css', 'instagram-profile.css');
+            injectJs('openclip-instagram-js', 'instagram-profile.js');
+        }
+    });
     
-    plainText.textContent = "Enjoying OpenClip?";
-    underlinedText.textContent = "Help spread the word!";
-    link.append(plainText, " ", underlinedText);
+    // If the user is logged into Instagram, remove CSS/JS to not interfere
+    const observer = new MutationObserver(() => {
+        const nav = document.querySelector('nav');
+        if (nav) {
+            removeCss('openclip-instagram-css');
+            removeJs('openclip-instagram-js');
+            observer.disconnect();
+        }
+    });
     
-    link.addEventListener("click", () => {
-        localStorage.setItem("OpenClip-lastReviewedVersion", chrome.runtime.getManifest().version);
-        plainText.textContent = "Thank you! ❤️";
-        underlinedText.textContent = "";
-    }, true);
+    observer.observe(document, { childList: true, subtree: true });
+}
+
+function redirectEmptyProfilePaths() {
+    const headObserver = new MutationObserver(() => {
+        const titleEl = document.querySelector("title");
+        if (!titleEl || !document.title) return;
+
+        const match = document.title.match(/@([a-z0-9._]+)/i);
+        if (!match) return;
+
+        const username = match[1];
+        const newPath = `/${username}/posts/`;
+        
+        headObserver.disconnect();
+
+        if (location.pathname !== newPath) {
+            location.replace(newPath);
+        }
+    });
+
+    headObserver.observe(document.documentElement, {
+        childList: true,
+        subtree: true
+    });
+}
+
+function onDomReady(callback) {
+    if (document.readyState === 'loading') {
+        window.addEventListener('DOMContentLoaded', callback);
+    } else {
+        callback();
+    }
+}
+
+function injectCss(id, filename) {
+    if (document.getElementById(id)) return;
+
+    const url = chrome.runtime.getURL(filename);
+    const link = document.createElement('link');
+    link.id = id;
+    link.rel = 'stylesheet';
+    link.href = url;
     
-    return link;
+    document.head.appendChild(link);
+}
+
+function injectJs(id, filename) {
+    if (document.getElementById(id)) return;
+
+    const url = chrome.runtime.getURL(filename);
+    const script = document.createElement('script');
+    script.id = id;
+    script.src = url;
+    script.type = 'text/javascript';
+    script.defer = true;
+    
+    document.head.appendChild(script);
+}
+
+function removeCss(id) {
+    const link = document.getElementById(id);
+    if (link && link.tagName === 'LINK') {
+        link.remove();
+    }
+}
+
+function removeJs(id) {
+    const script = document.getElementById(id);
+    if (script && script.tagName === 'SCRIPT') {
+        script.remove();
+    }
 }

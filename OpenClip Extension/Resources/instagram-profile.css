@@ -1,0 +1,49 @@
+nav > div {
+    height: var(--mobile-nav-height) !important; /* Remove extra space below header */
+}
+
+div.html-div h2 { /* Fix squished username */
+    line-height: 1.5;
+}
+
+/* Fix username alignment */
+div[aria-disabled="false"] > div {
+    margin-top: 12px;
+}
+
+header > div > div > div > div:last-child, /* Open app" header button */
+div.html-div:has(div[role="dialog"]) { /* See full profile in the app modal */
+    display: none;
+}
+
+/* Allow taps on header logo */
+svg[aria-label="Instagram"] {
+    pointer-events: auto;
+}
+
+/* Vertical dots after username */
+div[style*="--x-width: 34px"] {
+    pointer-events: auto;
+}
+
+/* Disable taps besides those manually set to auto */
+body > div[id*="mount"] {
+    pointer-events: none;
+}
+
+header:has(~ :last-child) ~ :last-child header ~ :last-child {
+    pointer-events: auto;
+}
+
+/* Hide "...more" at end of description */
+header:has(~ :last-child) ~ :last-child header section:last-child span span {
+  display: none;
+}
+
+/* Allow tapping on tab bar items */
+body > div[id*="mount"] header > div > div:last-child,
+body > div[id*="mount"] div[role="dialog"] button,
+body > div[id*="mount"] div[role="tablist"],
+body > div[id*="mount"] header > header > section > div > div > div:last-child {
+    pointer-events: auto;
+}

@@ -111,6 +111,8 @@ final class VideoExplainerView: UIView {
         playerLayer?.rasterizationScale = UIScreen.main.scale
         playerLayer?.videoGravity = .resize
         
+        try? AVAudioSession.sharedInstance().setCategory(.ambient)
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
             // Wait a second before playing
             player.play()

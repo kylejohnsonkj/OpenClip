@@ -54,6 +54,13 @@
 			);
 			target = E50D661F2C94DE4A00906236 /* OpenClip Extension */;
 		};
+		E57AAE542EE8DB8400C4513E /* Exceptions for "OpenClip" folder in "OpenClip Extension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				PurchaseManager.swift,
+			);
+			target = E50D661F2C94DE4A00906236 /* OpenClip Extension */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -61,6 +68,7 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				E5079F322CA06DBC00C37E8C /* Exceptions for "OpenClip" folder in "OpenClip" target */,
+				E57AAE542EE8DB8400C4513E /* Exceptions for "OpenClip" folder in "OpenClip Extension" target */,
 			);
 			path = OpenClip;
 			sourceTree = "<group>";
@@ -171,7 +179,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1600;
+				LastSwiftUpdateCheck = 2600;
 				LastUpgradeCheck = 2600;
 				TargetAttributes = {
 					E50D660A2C94DDD900906236 = {
@@ -389,7 +397,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kylejohnson.OpenTok;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -423,7 +431,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kylejohnson.OpenTok;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -451,7 +459,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 2.0;
 				OTHER_LDFLAGS = (
 					"-framework",
 					SafariServices,
@@ -484,7 +492,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 2.0;
 				OTHER_LDFLAGS = (
 					"-framework",
 					SafariServices,

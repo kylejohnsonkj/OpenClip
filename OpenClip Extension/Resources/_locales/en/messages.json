@@ -4,7 +4,7 @@
         "description": "The display name for the extension."
     },
     "extension_description": {
-        "message": "Watch shared videos in your browser.",
+        "message": "Watch social videos in your browser again",
         "description": "Description of what the extension does."
     }
 }

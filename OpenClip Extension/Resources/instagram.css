@@ -1,0 +1,50 @@
+header:has(svg[aria-label="Instagram"]), /* Instagram header */
+div[role="button"] > div > div:has(a[href*="/accounts/signup/phone"]), /* Sign up for Instagram */
+div[class*="html-div"] > a[href*="/reels/"] + div { /* Follow button after username */
+    display: none;
+}
+
+a[href*="/accounts/signup/phone"]:hover {
+    background-color: white; /* change "Watch again" button highlight color */
+}
+
+div[id*="video-iv-overlay"] {
+    padding-bottom: 0; /* Remove extra padding below video description */
+    background-image: linear-gradient(to top, #00000059 0%, #00000000 30%); /* Remove top header overlay */
+}
+
+div:has(> div[role="button"] svg[aria-label="More"]) {
+  margin-bottom: 0;
+}
+
+svg[aria-label="Like"],
+svg[aria-label="Comment"],
+svg[aria-label="More"] {
+    opacity: 0.5;
+}
+
+/* Like, comment, share, more buttons */
+div.html-div[style*="--x-maxHeight"] + div {
+    pointer-events: auto;
+    margin-bottom: 16px !important;
+}
+
+/* Video description */
+div.html-div[style*="--x-maxHeight"] {
+    margin-bottom: 16px;
+}
+div.html-div[style*="--x-maxHeight"] div {
+    height: auto;
+}
+div.html-div[style*="--x-maxHeight"] span:nth-of-type(1) {
+    white-space: unset;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+}
+div.html-div[style*="--x-maxHeight"] span:nth-of-type(2) {
+    display: none;
+}
+div.html-div[style*="--x-maxHeight"] div:last-child {
+    pointer-events: none;
+}

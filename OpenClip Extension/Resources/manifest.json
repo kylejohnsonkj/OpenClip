@@ -4,27 +4,19 @@
 
     "name": "__MSG_extension_name__",
     "description": "__MSG_extension_description__",
-    "version": "1.3",
-
-    "icons": {
-        "48": "images/icon-48.png",
-        "64": "images/icon-64.png",
-        "96": "images/icon-96.png",
-        "128": "images/icon-128.png",
-        "256": "images/icon-256.png",
-        "512": "images/icon-512.png"
-    },
+    "version": "2.0",
 
     "content_scripts": [{
         "js": ["content.js"],
-        "css": ["content.css"],
         "matches": [
-            "https://*.tiktok.com/*"
+            "https://*.tiktok.com/*",
+            "https://*.instagram.com/*"
         ],
         "run_at": "document_start"
     }],
 
     "action": {
+        "default_popup": "popup.html",
         "default_icon": {
             "48": "images/icon-48.png",
             "64": "images/icon-64.png",
@@ -36,6 +28,32 @@
     },
 
     "permissions": [
-        "https://*.tiktok.com/*"
+        "https://*.tiktok.com/*",
+        "https://*.instagram.com/*",
+        "nativeMessaging"
+    ],
+    
+    "background": {
+        "service_worker": "background.js"
+    },
+    
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "tiktok.css",
+                "tiktok.js",
+                "images/*.png"
+            ],
+            "matches": ["https://*.tiktok.com/*"]
+        },
+        {
+            "resources": [
+                "instagram.css",
+                "instagram-profile.css",
+                "instagram.js",
+                "instagram-profile.js"
+            ],
+            "matches": ["https://*.instagram.com/*"]
+        }
     ]
 }

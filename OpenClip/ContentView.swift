@@ -8,19 +8,47 @@
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject private var purchaseManager = PurchaseManager.shared
+    @State private var selectedTab = Tab.tiktok
+    
+    enum Tab {
+        case tiktok, instagram
+    }
+    
     var body: some View {
-        ScrollView {
-            HeaderView()
-            HowToListView()
+        TabView(selection: $selectedTab) {
+            // TikTok tab
+            ScrollView {
+                HeaderView()
+                HowToListView()
+            }
+            .gradientBackground()
+            .tabItem {
+                Image(systemName: "music.note")
+                Text("TikTok")
+            }
+            .tag(Tab.tiktok)
+
+            // Instagram tab
+            ScrollView {
+                HeaderView()
+                PurchaseView()
+            }
+            .gradientBackground()
+            .tabItem {
+                Image(systemName: "camera.fill")
+                Text("Instagram")
+            }
+            .tag(Tab.instagram)
         }
-        .background(
-            LinearGradient(gradient: Gradient(colors: [
-                .background,
-                .background,
-                .tableViewBackground,
-                .tableViewBackground
-            ]), startPoint: .top, endPoint: .bottom)
-        )
+        .onOpenURL { url in
+            switch url.host {
+            case "instagram":
+                selectedTab = .instagram
+            default:
+                break
+            }
+        }
     }
 }
 
@@ -36,7 +64,7 @@ struct HeaderView: View {
                 Text("OpenClip")
                     .font(.title)
                     .bold()
-                Text("A Safari extension that lets you watch shared videos in your browser")
+                Text("A Safari extension that lets you watch social videos in your browser again")
                     .font(.footnote)
                     .bold()
                     .foregroundStyle(.secondary)
@@ -56,7 +84,6 @@ struct HowToListView: View {
                 .font(.footnote)
                 .foregroundStyle(.secondary)
                 .textCase(.uppercase)
-                .padding(.top)
             
             ListEntry(
                 Text("Open a shared TikTok video"),
@@ -68,7 +95,7 @@ struct HowToListView: View {
             ListButton(
                 text: "Try it now!",
                 image: "music.note",
-                link: "https://www.tiktok.com/t/ZP8eVDC8c/"
+                link: "https://www.tiktok.com/t/ZP8fev6Gs/"
             )
             .tint(.pink)
             .padding(.leading, buttonInset)
@@ -114,13 +141,13 @@ struct HowToListView: View {
             .padding(.leading, buttonInset)
             .padding(.bottom)
             
-            Text("TikTok® is a registered trademark of ByteDance Ltd. OpenClip is not affiliated with or endorsed by TikTok or ByteDance Ltd. All videos are provided by [tiktok.com](https://www.tiktok.com).")
+            Text("TikTok® is a registered trademark of ByteDance Ltd. OpenClip is not affiliated with or endorsed by TikTok or ByteDance Ltd. This extension runs on [tiktok.com](https://www.tiktok.com).")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
                 .frame(maxWidth: .infinity)
         }
-        .padding(.horizontal)
+        .padding()
         .background(.tableViewBackground)
     }
     
@@ -135,26 +162,17 @@ struct HowToListView: View {
             Text("Tap the \(Image(systemName: "puzzlepiece.extension")) icon on the right of the search bar")
         }
     }
-    
-    struct ListEntry: View {
-        let text: Text
-        let image: String
-        
-        init(_ text: Text, image: String) {
-            self.text = text
-            self.image = image
-        }
-        
-        var body: some View {
-            Label {
-                text
-                    .font(.headline)
-                    .imageScale(.large)
-            } icon: {
-                Image(systemName: image)
-                    .imageScale(.large)
-            }
-        }
+}
+
+extension View {
+    func gradientBackground() -> some View {
+        self.background(
+            LinearGradient(
+                gradient: Gradient(colors: [.background, .background, .tableViewBackground, .tableViewBackground]),
+                startPoint: .top,
+                endPoint: .bottom
+            )
+        )
     }
 }
 

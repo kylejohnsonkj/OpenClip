@@ -11,11 +11,13 @@ struct ListButton: View {
     let text: String
     let image: String
     let link: String?
+    let isExtrasSetup: Bool
     
-    init(text: String, image: String, link: String? = nil) {
+    init(text: String, image: String, link: String? = nil, isExtrasSetup: Bool = false) {
         self.text = text
         self.image = image
         self.link = link
+        self.isExtrasSetup = isExtrasSetup
     }
     
     @State var isSheetPresented = false
@@ -41,7 +43,7 @@ struct ListButton: View {
                     buttonLabel
                 }
                 .sheet(isPresented: $isSheetPresented) {
-                    VerifySetupListView()
+                    VerifySetupListView(isExtrasSetup: isExtrasSetup)
                 }
             }
         }
