@@ -2,7 +2,7 @@ makeInstagramLogoTappable();
 showThumbnailAlert();
 
 const observer = new MutationObserver(() => {
-    hideChannelFooter();
+    hideProfileFooter();
     attachInstagramTabs();
 });
 
@@ -42,7 +42,7 @@ function showThumbnailAlert() {
     });
 }
 
-function hideChannelFooter() {
+function hideProfileFooter() {
     const footer = Array.from(document.querySelectorAll('div.html-div')).find(
         d => getComputedStyle(d).paddingTop === '100px'
     );

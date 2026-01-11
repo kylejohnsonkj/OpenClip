@@ -54,18 +54,3 @@ struct PreviewImageView: View {
         }
     }
 }
-
-//private struct Badge: View {
-//    let title: String
-//    
-//    var body: some View {
-//        Text(title)
-//            .font(.callout)
-//            .bold()
-//            .foregroundColor(.white)
-//            .padding(.horizontal, 12)
-//            .padding(.vertical, 6)
-//            .background(Color.black.opacity(0.45))
-//            .cornerRadius(6)
-//    }
-//}

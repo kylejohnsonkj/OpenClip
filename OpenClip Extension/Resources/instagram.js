@@ -1,8 +1,7 @@
-attachChannelHandler();
+attachProfileHandler();
+attachUsernameHandler();
 
 const observer = new MutationObserver(() => {
-    preventSafariCannotOpenPageAlert();
-    attachUsernameHandler();
     attachShareHandler();
     changeWatchAgainLabel();
     createWatchAgainButton();
@@ -11,15 +10,7 @@ const observer = new MutationObserver(() => {
 // Observe the whole document
 observer.observe(document, { childList: true, subtree: true });
 
-function preventSafariCannotOpenPageAlert() {
-    document.querySelectorAll('script').forEach(script => {
-        if (!script.src && /window\.location\s*=\s*["']instagram:/.test(script.textContent)) {
-            script.remove();
-        }
-    });
-}
-
-function attachChannelHandler() {
+function attachProfileHandler() {
     document.addEventListener('click', e => {
         const authorButton = e.target.closest('span:has(img[alt*="profile picture"])');
         if (!authorButton) return;
@@ -36,18 +27,18 @@ function attachChannelHandler() {
 }
 
 function attachUsernameHandler() {
-    const usernameRow = document.querySelector('div[class*="html-div"] > a[href*="/reels/"]');
-    if (!usernameRow) return;
+    document.addEventListener("click", e => {
+        const usernameRow = e.target.closest(
+            'div[class*="html-div"] > a[href*="/reels/"]'
+        );
 
-    // Prevent multiple listeners
-    if (usernameRow.dataset.listenerAttached) return;
-    usernameRow.dataset.listenerAttached = 'true';
+        if (!usernameRow) return;
 
-    usernameRow.addEventListener('click', e => {
         e.preventDefault();
         e.stopPropagation();
+        e.stopImmediatePropagation();
 
-        const href = usernameRow.getAttribute('href');
+        const href = usernameRow.getAttribute("href");
         if (href) {
             window.location.href = href;
         }

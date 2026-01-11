@@ -49,7 +49,7 @@ if (url.hostname.includes('tiktok.com')) {
             initInstagram(true);
         }
     } else if (/\/(posts|feed|reels|saved|tagged)\/?$/.test(url.pathname)) {
-        // Channel: Modify logged out profile page
+        // Profile: Modify logged out profile page
         initInstagram(false);
         
     } else {
@@ -90,7 +90,7 @@ function appendOpenClipFooter(observer) {
         0: `
             OpenClip now supports
             <b class="medium">Instagram Reels</b>!
-            <a href="openclip://instagram">Activate in the app today.</a>
+            <a href="openclip://instagram">Activate it in the app today.</a>
         `,
         2: `Thank you for supporting development! ❤️`
     };

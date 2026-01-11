@@ -9,7 +9,7 @@ import StoreKit
 import SafariServices
 
 class SafariWebExtensionHandler: NSObject, NSExtensionRequestHandling {
-    
+
     func beginRequest(with context: NSExtensionContext) {
         Task {
             let request = context.inputItems.first as? NSExtensionItem

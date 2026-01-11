@@ -29,21 +29,12 @@ img {
     height: 96px;
 }
 
-a {
-    text-decoration: none;
-    color: #007aff;
-}
-
 .medium {
     font-weight: 500;
 }
 
 .pink {
     color: #ff5677;
-}
-
-.gold {
-    color: gold;
 }
 
 @media (prefers-color-scheme: dark) {

@@ -61,13 +61,7 @@ struct VerifySetupListView: View {
                         image: "checkmark.circle",
                         color: .orange
                     )
-//                    ColoredListEntry(
-//                        Text("Set **facebook.com** to Allow"),
-//                        image: "checkmark.circle",
-//                        color: .orange
-//                    )
                 }
-                
             } header: {
                 Text("\nVerify setup")
             } footer: {

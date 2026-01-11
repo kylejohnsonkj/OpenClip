@@ -5,7 +5,7 @@ div[class*="html-div"] > a[href*="/reels/"] + div { /* Follow button after usern
 }
 
 a[href*="/accounts/signup/phone"]:hover {
-    background-color: white; /* change "Watch again" button highlight color */
+    background-color: white; /* Change "Watch again" button highlight color */
 }
 
 div[id*="video-iv-overlay"] {
@@ -14,19 +14,18 @@ div[id*="video-iv-overlay"] {
 }
 
 div:has(> div[role="button"] svg[aria-label="More"]) {
-  margin-bottom: 0;
+  margin-bottom: 0; /* Remove spacing below more button */
 }
 
 svg[aria-label="Like"],
 svg[aria-label="Comment"],
 svg[aria-label="More"] {
-    opacity: 0.5;
+    opacity: 0.5; /* Display buttons as disabled */
 }
 
-/* Like, comment, share, more buttons */
 div.html-div[style*="--x-maxHeight"] + div {
-    pointer-events: auto;
-    margin-bottom: 16px !important;
+    pointer-events: auto; /* Allow taps on buttons */
+    margin-bottom: 16px !important; /* Match description offset */
 }
 
 /* Video description */

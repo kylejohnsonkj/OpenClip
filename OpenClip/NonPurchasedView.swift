@@ -73,9 +73,9 @@ struct NonPurchasedView: View {
                         Text("""
                             Thank you for considering supporting OpenClip. This project has grown from a simple extension I made to watch my wife's TikToks, to an app that resonates with users across 85+ countries! ❤️
                             
-                            Many have asked for a way to tip, but I wanted to give something back in return. Support for Instagram Reels has been a highly requested feature that I'm excited to release.
+                            Many have asked for a way to tip, but I wanted to offer something in return. Support for Instagram Reels has been a highly requested feature that I'm excited to release at last.
                             
-                            **This is a one-time purchase.** Maintaining OpenClip requires frequent updates as social platforms often change and run UI experiments that break functionality. Your support helps me dedicate the time to keeping things working while adding support for new features and sites.
+                            **This is a one-time purchase.** Maintaining OpenClip requires frequent updates as social platforms often change and run UI experiments that break functionality. Your support helps me dedicate the time to both maintaining this extension and developing new features.
                             
                             If you are unable to purchase, no worries! TikTok support will always remain free and [leaving a review](https://itunes.apple.com/app/id6708240044?action=write-review) goes a long way too. 🙂
                             
@@ -151,8 +151,26 @@ struct NonPurchasedView: View {
                 if isPurchasing {
                     ProgressView().padding()
                 } else {
-                    Text("Unable to load product")
-                        .foregroundStyle(.secondary)
+                    Group {
+                        Button {
+                        } label: {
+                            HStack {
+                                Image(systemName: "lock.fill")
+                                Text("Unable to load product")
+                            }
+                            .font(.headline)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.9)
+                            .foregroundStyle(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.gray)
+                            .cornerRadius(12)
+                        }
+                        .disabled(true)
+                        .frame(width: UIScreen.main.bounds.width * 0.8 + 12)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .center)
                 }
             }
             

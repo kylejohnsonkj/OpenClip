@@ -24,21 +24,12 @@ struct HowToExtrasView: View {
             .padding(.top, 12)
             .padding(.bottom, 8)
             
-            HStack {
-                ListButton(
-                    text: "Try it now!",
-                    image: "camera.fill",
-                    link: "https://www.instagram.com/reel/DLXrFTyMz6m/?igsh=MXNlcTBkM2Z6NWQw"
-                )
-                .tint(.pink)
-                
-//                ListButton(
-//                    text: "Facebook",
-//                    image: "play.rectangle",
-//                    link: "https://www.facebook.com/share/r/16rtLmYZ8m/"
-//                )
-//                .tint(.blue)
-            }
+            ListButton(
+                text: "Try it now!",
+                image: "camera.fill",
+                link: "https://www.instagram.com/reel/DLXrFTyMz6m/?igsh=MXNlcTBkM2Z6NWQw"
+            )
+            .tint(.pink)
             .padding(.leading, buttonInset)
             
             ListEntry(
@@ -82,12 +73,6 @@ struct HowToExtrasView: View {
             .frame(maxWidth: .infinity, alignment: .center)
             .padding(.top, 4)
             .padding(.bottom, 16)
-            
-//            ListEntry(
-//                Text("Repeat steps, or manually set both websites to \"Allow\" in Settings"),
-//                image: "4.circle"
-//            )
-//            .padding(.vertical, 12)
             
             ListEntry(
                 Text("Videos still not playing?"),
