@@ -4,15 +4,10 @@
 
     "name": "__MSG_extension_name__",
     "description": "__MSG_extension_description__",
-    "version": "2.0.1",
+    "version": "2.0.2",
 
     "icons": {
-        "48": "images/icon-48.png",
-        "64": "images/icon-64.png",
-        "96": "images/icon-96.png",
-        "128": "images/icon-128.png",
-        "256": "images/icon-256.png",
-        "512": "images/icon-512.png"
+        "96": "images/settings-icon.png"
     },
 
     "content_scripts": [{
@@ -27,12 +22,7 @@
     "action": {
         "default_popup": "popup.html",
         "default_icon": {
-            "48": "images/default-icon-48.png",
-            "64": "images/default-icon-64.png",
-            "96": "images/default-icon-96.png",
-            "128": "images/default-icon-128.png",
-            "256": "images/default-icon-256.png",
-            "512": "images/default-icon-512.png"
+            "96": "images/safari-icon.png"
         }
     },
 
