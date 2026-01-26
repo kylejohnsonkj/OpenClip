@@ -1,5 +1,5 @@
 header:has(svg[aria-label="Instagram"]), /* Instagram header */
-div[role="button"] > div > div:has(a[href*="/accounts/signup/phone"]), /* Sign up for Instagram */
+div:has(> a[href*="/accounts/signup/phone"]:only-child), /* Sign up for Instagram */
 div[class*="html-div"] > a[href*="/reels/"] + div { /* Follow button after username */
     display: none;
 }
