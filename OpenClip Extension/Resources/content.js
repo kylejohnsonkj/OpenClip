@@ -124,6 +124,8 @@ function appendOpenClipFooter(observer) {
 function initInstagram(isReel) {
     if (localStorage.getItem('instagramPurchaseStatus') !== 'true') return;
     
+    window.addEventListener('DOMContentLoaded', e => e.stopImmediatePropagation(), true);
+    
     onDomReady(() => {
         if (isReel) {
             injectCss('openclip-instagram-css', 'instagram.css');
@@ -171,12 +173,23 @@ function redirectEmptyProfilePaths() {
     });
 }
 
+// no longer using `DOMContentLoaded` to avoid deeplink alert
 function onDomReady(callback) {
-    if (document.readyState === 'loading') {
-        window.addEventListener('DOMContentLoaded', callback);
-    } else {
+    if (document.body) {
         callback();
+        return;
     }
+    
+    const bodyObserver = new MutationObserver(() => {
+        if (document.body) {
+            bodyObserver.disconnect();
+            callback();
+        }
+    });
+    
+    bodyObserver.observe(document.documentElement, {
+        childList: true
+    });
 }
 
 function injectCss(id, filename) {
