@@ -10,6 +10,9 @@ attachChannelHandler();
 // Player - Add share button support
 attachShareHandler("play-side-share");
 
+// Player - Allow expanding video description
+toggleDescriptionHeight();
+
 // Channel - Add share button support
 attachShareHandler("share-btn");
 
@@ -88,6 +91,23 @@ function attachShareHandler(identifier) {
             title: document.title,
             url: window.location.href
         }) || alert("Sharing not supported");
+    }, true);
+}
+
+function toggleDescriptionHeight() {
+    document.addEventListener("click", e => {
+        const button = e.target.closest('article[class*="ArticleLimitLine"] > button');
+        if (!button) return;
+        
+        e.preventDefault();
+        e.stopPropagation();
+
+        const article = button.closest('article[class*="ArticleLimitLine"]');
+        if (!article) return;
+
+        const isExpanded = article.classList.toggle("expanded");
+
+        button.textContent = isExpanded ? "See less" : "See more";
     }, true);
 }
 

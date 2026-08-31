@@ -30,6 +30,10 @@ footer[data-e2e*="playlist-banner"] { /* playlist banner */
     display: none !important;
 }
 
+div[class*="DivVideoCard"] {
+    --video-height: calc(100dvh);
+}
+
 div[class*="DivUnmuteButton"] {
     top: 16px; /* move unmute now that top bar is hidden */
 }
@@ -60,12 +64,21 @@ div[data-e2e*="play-side-comment"] svg { /* comment button */
     opacity: 0.5;
 }
 
-article[class*="ArticleLimitLine"] > button { /* hide "See more" */
-    font-size: 0;
+div[data-e2e*="play-side-comment"] div[class*="DivOperationItem"] > div { /* remove extra vertical space between comment icon and count */
+    margin-bottom: -5px;
 }
 
-article[class*="ArticleLimitLine"] > button::before { /* but keep ellipsis */
-    font-size: initial;
+article[class*="ArticleLimitLine"] {
+    max-height: calc(var(--line-height) * 2);
+    overflow: hidden;
+}
+
+article[class*="ArticleLimitLine"].expanded {
+    max-height: calc(var(--line-height) * 10);
+}
+
+article[class*="ArticleLimitLine"] > button {
+    pointer-events: auto;
 }
 
 div[class*="layout-box"] {
