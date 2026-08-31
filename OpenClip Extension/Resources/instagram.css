@@ -1,6 +1,7 @@
 header:has(svg[aria-label="Instagram"]), /* Instagram header */
 div:has(> a[href*="/accounts/signup/phone"]:only-child), /* Sign up for Instagram */
-div[class*="html-div"] > a[href*="/reels/"] + div { /* Follow button after username */
+div[class*="html-div"] > a[href*="/reels/"] + div, /* Follow button after username */
+div:has(> div[role="button"] svg[aria-label="More"]) { /* Hide more button */
     display: none;
 }
 
@@ -11,10 +12,6 @@ a[href*="/accounts/signup/phone"]:hover {
 div[id*="video-iv-overlay"] {
     padding-bottom: 0; /* Remove extra padding below video description */
     background-image: linear-gradient(to top, #00000059 0%, #00000000 30%); /* Remove top header overlay */
-}
-
-div:has(> div[role="button"] svg[aria-label="More"]) {
-  margin-bottom: 0; /* Remove spacing below more button */
 }
 
 svg[aria-label="Like"],

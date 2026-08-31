@@ -135,6 +135,13 @@ struct NonPurchasedView: View {
             .frame(maxWidth: .infinity, alignment: .center)
             .padding(.vertical, 8)
             
+            Text("**Note:** These enhancements only apply when logged out")
+                .padding(.bottom, 8)
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: .infinity)
+            
             if let product = product {
                 HStack {
                     PurchaseButtons(

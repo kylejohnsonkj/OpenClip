@@ -38,7 +38,7 @@ function showThumbnailAlert() {
         e.stopPropagation();
         e.stopImmediatePropagation();
         
-        alert("Unfortunately, Instagram makes it impossible to navigate to the posts behind these thumbnails without an account.");
+        alert("Unfortunately, Instagram requires an account to navigate to profile videos.");
     });
 }
 

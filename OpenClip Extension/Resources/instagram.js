@@ -46,7 +46,7 @@ function attachUsernameHandler() {
 }
 
 function attachShareHandler() {
-    const actionRow = document.querySelector(`div.html-div[style*="--x-maxHeight"] + div`);
+    const actionRow = document.querySelector(`div[aria-label="Video player"] > div > div > div + div`);
     
     if (!actionRow || actionRow.dataset.listenerAttached) return;
     actionRow.dataset.listenerAttached = 'true';
