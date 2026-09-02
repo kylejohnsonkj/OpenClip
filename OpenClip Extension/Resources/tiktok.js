@@ -1,9 +1,6 @@
 // Player - Force "Watch again" button to always reload the video
 fixWatchAgainButton();
 
-// Player - Allow navigation to commenter profiles
-attachCommentHandlers();
-
 // Player - Add channel button support
 attachChannelHandler();
 
@@ -44,23 +41,6 @@ function fixWatchAgainButton() {
         } else {
             didWatchAgain = true;
         }
-    }, true);
-}
-
-function attachCommentHandlers() {
-  document.addEventListener("click", e => {
-      const link = e.target.closest(
-        'a[class*="StyledUserLinkAvatar"], a[class*="StyledUserLinkName"]'
-      );
-      if (!link) return;
-
-      e.preventDefault();
-      e.stopPropagation();
-
-      const href = link.getAttribute("href");
-      if (!href) return;
-
-      location.assign(href);
     }, true);
 }
 

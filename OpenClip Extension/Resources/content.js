@@ -62,63 +62,6 @@ function initTikTok() {
         injectCss('openclip-tiktok-css', 'tiktok.css');
         injectJs('openclip-tiktok-js', 'tiktok.js');
     });
-    
-    // Inject OpenClip banner at bottom of page
-    const observer = new MutationObserver(() => {
-        appendOpenClipFooter(observer);
-    });
-    observer.observe(document, { childList: true, subtree: true });
-}
-
-function appendOpenClipFooter(observer) {
-    const messageId = "openclip-message";
-    if (document.getElementById(messageId)) return;
-    
-//    localStorage.setItem("OpenClip-footerValue", String(0)); // testing
-    
-    var footerValue = Number(localStorage.getItem("OpenClip-footerValue") || 0);
-    const wasInstagramPurchased = localStorage.getItem('instagramPurchaseStatus') === 'true';
-    if (wasInstagramPurchased && (footerValue == 0 || footerValue == 1)) {
-        footerValue = 2;
-    }
-    
-    // 0 - not purchased (default)
-    // 1 - not purchased, dismissed
-    // 2 - purchased
-    // 3 - purchased, dismissed
-    const messages = {
-        0: `
-            OpenClip now supports
-            <b class="medium">Instagram Reels</b>!
-            <a href="openclip://instagram">Activate it in the app today.</a>
-        `,
-        2: `Thank you for supporting development! ❤️`
-    };
-    
-    const messageHTML = messages[footerValue];
-    if (!messageHTML) return;
-    
-    const comments = document.querySelector('div[class*="DivCommentListContainer"]');
-    const parent = comments.parentNode;
-    const iconURL = browser.runtime.getURL("images/app-icon.png");
-    
-    if (!comments || !parent || !iconURL) return;
-    
-    const footer = document.createElement("div");
-    footer.id = messageId;
-    footer.innerHTML = `
-        <img src="${iconURL}" alt="OpenClip Icon">
-        <p>${messageHTML}</p>
-        <button aria-label="Dismiss">✕</button>
-    `;
-    
-    footer.querySelector("button").addEventListener("click", () => {
-        footer.style.display = "none";
-        localStorage.setItem("OpenClip-footerValue", String(footerValue + 1));
-    });
-    
-    parent.append(footer);
-    observer.disconnect();
 }
 
 function initInstagram(isReel) {

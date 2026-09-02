@@ -135,7 +135,7 @@ struct NonPurchasedView: View {
             .frame(maxWidth: .infinity, alignment: .center)
             .padding(.vertical, 8)
             
-            Text("**Note:** These enhancements only apply when logged out")
+            Text("**Note:** Due to limitations, these enhancements only apply when logged out of an Instagram account")
                 .padding(.bottom, 8)
                 .font(.footnote)
                 .foregroundStyle(.secondary)
